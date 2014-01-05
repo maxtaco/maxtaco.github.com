@@ -13,6 +13,11 @@ and OkCupid, I've been working on the [IcedCoffeeScript](https://maxtaco.github.
 extention to CoffeeScript, the [OneShallPass](https://oneshallpass.com) password
 management system, and a new project with [Chris Coyne](http://malgorithms.com).
 
+## Follow Me
+
+* [@maxtaco](https://twitter.com/maxtaco) on Twutter
+* [maxtaco](https://github.com/maxtaco) on GitHub
+
 
 ## Posts
 
