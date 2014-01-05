@@ -7,13 +7,84 @@ tags: [bitcoin, warpwallet, security]
 ---
 {% include JB/setup %}
 
-# The Problem
+### Abstract
 
-I've recently come across some folks who want to hold onto bitcoin for the long haul.  The question on our
-minds is how to hold onto bitcoin cheaply, simply and securely.  Everyone has their own ideas on this, but I've
-put together some instructions that make sense to me and my colleagues.
+We discuss how to store bitcoin reliably and securely for the long-haul.
 
-## What's Wrong with Coinbase?
+#### What you'll need:
+
+1. One networked machine
+1. One "air-gapped" old laptop, preferably without any wireless capabilities.
+1. A smartphone with a barcode scanner.
+
+### Intro
+
+If you want to store bitcoin for the long-haul, you should address the thorny
+problem of how best to store them.  Since people love stealing bitcoins
+from others more than just about anything else in this world, all storage
+systems must first and foremost:
+
+     1. Prevent others from stealing your coin
+
+The easiest way to achieve this goal is simply to destroy your private keys.
+So there must be a yin to requirement #1's yang, which is to:
+
+     2. Avoid accidental loss
+
+Storing bitcoin shouldn't rob them of their best properties.  So in
+addition, good bitcoin storage should be:
+
+     3. Low-cost
+
+and in case you need to leave the country in a hurry, or if you inexplicably
+wash up naked on a foreign shore:
+
+     4. Globally accessible
+
+We realize #4 is ridiculous, but still, it's fun to think about.
+
+Achieving all four of these goals simultaneously is challenging, and most systems we
+looked at fell short on at least one of these axes.  We'll cover those later in this
+article, but first, we suggest a prefered method to store your retirement coin, which is:
+
+### A Security-Enhanced *Brain Wallet*
+
+A brain wallet is an open algorithm that deterministically converts a
+secret passphrase into public/private key pair.  We found existing
+brainwallets lacking, so we built [WarpWallet](https://keybase.io/warp), a
+security-enhanced brain wallet implemented as a standalone Web page.  Here is
+the system, at a high level (we present a detailed step-by-step checklist below):
+
+1. Buy your retirement coins on [Coinbase](https://coinbase.com) or the exchange of
+your choosing.
+1. Copy the [WarpWallet HTML](https://keybase.io/warp) to an air-gapped machine.
+1. Pick a good passphrase. For example: `vicar formal lubbers errata veriest mutton`.  More on this later.
+1. Run WarpWallet on the air-gapped machine to convert your passphrase to a public/private key pair.
+1. Use your phone to scan the public key, and email it to yourself.
+1. On your networked machine, transfer coin from Coinbase to the WarpWallet-generated address.
+1. Turn off the air-gapped machine.
+1. Leave little notes around your house and office to remind you of what your passphrase is in case you ever forget
+
+### Security Analysis
+
+There are three main attacks an adversary can attempt to steal your coin: (1) infiltrate your 
+machines; (2) break WarpWallet's cryptography; or (3) brute-force your password.  Let's look at
+all three.
+
+For the first attack, assume the worst case, that the attacker has compromised all three machines.
+
+
+
+
+### What's a Good Passphrase?
+
+### What You'll Need
+
+### Step-By-Step Checklist
+
+### Survey of Other Systems
+
+#### Coinbase, and other online wallets
 
 Many of us buy our coin from [Coinbase](https://coinbase.com) since it's a
 great company, with [great engineers](http://www.craighammell.com/) and they
@@ -27,30 +98,12 @@ attacks. Though their security has been good to-date, it is an ongoing fight
 against determined, well-motivated adversaries. Finally, neither the FDIC nor
 any other body insures Coinbase, so unlike bank deposits, your coin at
 Coinbase disappears in the case of a "bank run" or a sudden business failure.
-One of the coolest parts of bitcoin is that it allows you to take your
-security into your own hands.  Why not grab this opportunity by the balls
-(bits)?
 
-## What Does a Solution Look Like?
-
-A good long-term storage coin solution has the following properties:
-
-1. Resilience to theft
-1. Resilience to loss and other forms of user error
-1. Low-expense
-1. Global accessibility (in case you need to flee or wash up inexplicably naked
-on a foreign shore).
-
-Of course, the first two are by far the most important, but in the interest of being
-thorough, let's consider the full list and see how different coin storage methods fare:
-
-#### Online wallet services (like Coinbase, BitStamp, etc)
-
-Online wallets, as argued above, are vulnerable to online attacks, 
-[financial fraud](http://www.zerohedge.com/news/2013-07-23/texan-charged-bitcoin-denominated-ponzi-scheme),
+With other online systems, we've seen cases of
+[financial fraud](http://www.zerohedge.com/news/2013-07-23/texan-charged-bitcoin-denominated-ponzi-scheme) and
 "honest" [programmer](http://arstechnica.com/business/2013/04/bitfloor-number-four-bitcoin-based-exchange-shuts-down-for-good/) 
-[error](https://bitcointalk.org/index.php?topic=83794.0#post_bitomatpl_loss)
-or business errors.  So some combination of malice and carelessness can threaten your savings.
+[error](https://bitcointalk.org/index.php?topic=83794.0#post_bitomatpl_loss) robbing
+customers of their savings.
 
 #### Running Your Own Wallet 
 
@@ -99,7 +152,7 @@ databases, movie lines, song lyrics, etc.
 1. Watch the block chain for transfers sent to public addresses in the precomputed database.
 1. On a hit, use the corresponding private key to transfer the coin to a safe address.
 
-## Enter WarpWallet
+#### Enter WarpWallet
 
 But [WarpWallet](https://keybase.io/warp) is a brain wallet  that raises the
 security bar substantially with two improvements: first, warp wallets are
