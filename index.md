@@ -1,11 +1,11 @@
 ---
 layout: page
-title: About
+title: About Me
 ---
 {% include JB/setup %}
 
 Hi, I'm Max Krohn.  I like to build software.  Previously, I was
-the co-founder and CTO of [SparkNotes](http://www.sparknotes.com)
+the co-founder and CTO of TheSpark.com, [SparkNotes](http://www.sparknotes.com)
 and [OkCupid](http://okcupid.com).  I built the [Ok Web Server](https://okws.org)
 for OkCupid while pursing a [PhD](http://pdos.csail.mit.edu/~max/docs/krohn-thesis.pdf)
 at [MIT advised by Frank Kaashoek](http://pdos.csail.mit.edu). Since leaving MIT
