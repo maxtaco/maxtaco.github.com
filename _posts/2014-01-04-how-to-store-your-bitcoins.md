@@ -32,20 +32,20 @@ So there must be a yin to requirement #1's yang, which is to:
      2. Avoid accidental loss
 
 Storing bitcoin shouldn't rob them of their best properties.  So in
-addition, good bitcoin storage should be:
+addition, good bitcoin storage should:
 
-     3. Low-cost
+     3. Be low-cost
 
-and in case you need to leave the country in a hurry, or if you inexplicably
-wash up naked on a foreign shore:
+And in case you need to leave the country in a hurry, or if you inexplicably
+wash up naked on a foreign shore, your coin should:
 
-     4. Globally accessible
+     4. Be globally accessible
 
 We realize #4 is ridiculous, but still, it's fun to think about.
 
 Achieving all four of these goals simultaneously is challenging, and most systems we
 looked at fell short on at least one of these axes.  We'll cover those later in this
-article, but first, we suggest a prefered method to store your retirement coin, which is:
+article, but first, we recommend a scheme to store your retirement coin, which is:
 
 ### A Security-Enhanced *Brain Wallet*
 
@@ -60,15 +60,15 @@ your choosing.
 1. Visit [WarpWallet](https://keybase.io/warp) and note the SHA-256 sum in the URL after the redirect
 1. Boot up your air-gapped machine (AGM), preferably from a Linux live disk.
 1. Copy the HTML to your AGM using a USB-stick.
-1. Run `sha256sum warp.html` and verify that the sum matches the sum you observed in step 2.
+1. Run `sha256sum warp.html` on the AGM to verify that the sum matches the sum you observed in step 2.
 1. Open the HTML as a local file with Chrome or Firefox.  
     1. Test the configuration with a few temporary passphrases and small transfers (see below for more details).
     1. Pick a good passphrase. For example: `vicar formal lubbers errata mutton`.  More on this later.
     1. Run the configuration in "production", with your real passphrase. Use your email address as your "salt".  You'll
        get a public/private key pair out.
-1. Use your phone to scan the public key, and transfer it to your networked machine (via email, for example). When scanning, be careful to resize your browser window so that only the public passphrase QR code is visible.
-1. On your networked machine, transfer coin from Coinbase to the WarpWallet-generated address.
+1. Use your phone to scan the public key, and transfer it to your networked machine (via email, for example). When scanning, be careful to resize your browser window so that only the public QR code is visible.
 1. Turn off the air-gapped machine.
+1. On your networked machine, transfer coin from Coinbase to the WarpWallet-generated address.
 1. Leave little cryptic notes around your house and office to remind you of what your passphrase is in case you ever forget
 
 
@@ -82,25 +82,30 @@ machines; (2) break WarpWallet's cryptography; (3) brute-force your password; or
 guess your passphrase from your little "reminder" notes.  Let's look at
 all four:
 
-For the first attack, assume the worst case, that the attacker has compromised all three machines.
-An attacker who has compromised your air-gapped machine knows your private key, but has no
-way to communicate it back.  A compromise of your phone or your networked machine gives
-the attacker access to your public key, but that won't allow a theft of your coin as long
-as the Bitcoin protocol holds.  Of course, an attacker who controls your networked machine
-can also move your coin out of a Coinbase to an account of his choosing, but assuming you can
-transfer your coin to a WarpWallet before him, you are in the clear.  If you lose the race,
-we of course can't help, welcome to the brotherhood of the burgled. Similarly, if the attacker
-controls all code running on all of your machines, you might not be able to run the
-real version of WarpWallet and instead might have trojaned version that only outputs
-keys that the attacker knows.  We don't have a great answer to this attack other than
-to check your version of WarpWallet against other machines, either by cryptographic
-hash, or by checking known input/output pairs.
+For the first attack, assume the worst case, that the attacker has compromised
+all three machines. An attacker who has compromised your air-gapped machine
+knows your private key, but has no way to communicate it back (you should make
+sure to never connect your AGM back to the network).  A compromise of your
+phone or your networked machine gives the attacker access to your public key,
+but that won't allow a theft of your coin as long as the Bitcoin protocol
+holds.  Of course, an attacker who controls your networked machine can also
+move your coin out of a Coinbase to an account of his choosing, but assuming
+you can transfer your coin to a WarpWallet before him, you are in the clear.
+If you lose the race, we of course can't help, welcome to the brotherhood of
+the burgled. Similarly, if the attacker controls all code running on all of
+your machines, you might not be able to run the real version of WarpWallet and
+instead might have trojaned version that only outputs keys that the attacker
+knows.  We don't have a great answer to this attack other than to check your
+version of WarpWallet against other machines, either by cryptographic hash, or
+by checking known input/output pairs.
 
 The next attack to consider is a break of WarpWallet's cryptography.  WarpWallet works as follows:
 
 1. Generate `s1`	= scrypt(key=`passphrase||0x1`, salt=`salt||0x1`, N=2<sup>18</sup>, r=8, p=1, dkLen=32)
-1. Generate `s2`	= pbkdf2(key=`passphrase||0x2`, salt=`salt||0x2`, c=2<sup>16</sup>, dkLen=32, prf=HMAC_SHA256)
-1. Generate `keypair`	= generate_bitcoin_keypair(`s1` ⊕ `s2`)
+1. Generate `s2`	= PBKDF2(key=`passphrase||0x2`, salt=`salt||0x2`, c=2<sup>16</sup>, dkLen=32, prf=HMAC_SHA256)
+1. Assign `private_key` = `s1` ⊕ `s2`
+1. Generate `public_key` from `private_key` using standing Bitcoin EC crypto.
+1. Output `keypair` = (`private_key`, `public_key`)
 
 A crypto break would allow an adversary to compute `keypair` from a candidate
 `passphrase` and `salt` more efficiently than running `scrypt` and `PBKDF2` in
@@ -110,7 +115,7 @@ force attack is. The attack works as follows:
 
 1. Generate a huge dictionary of possible passphrases, pulled from literature, popular password
 databases, movie lines, song lyrics, etc.
-1. For each phrase in the corpus, generate a brain wallet key pair.
+1. For each phrase in the corpus, generate a brain wallet key pair using the above algorithm.
 1. Watch the block chain for transfers sent to public addresses in the precomputed database.
 1. On a hit, use the corresponding private key to transfer the coin.
 
@@ -143,8 +148,7 @@ since November 2013.
 Finally, there is a risk that people who you physically interact with will find one of your reminder
 notes, recover your passphrase and steal your coin.  The best defense agaist this attack
 is first, to make your reminder cryptic enough so that anyone who finds it won't know what it is;
-and second, to not hang out with dicks who would steal your money.  Some combination of the two
-will protect your backup notes.
+and second, to not hang out with dicks who would steal your money.
 
 #### What's a Good Passphrase?
 
@@ -152,15 +156,16 @@ When generating a passphrase, it's nice to use an algorithm that produces a
 passphrase with quantifiable entropy. For instance, [this
 page](https://oneshallpass.com/pp.html) picks *N* words at random from the
 dictionary, and gives you more passphrase entropy for higher values of *N*.
-We can memorize passphrases like these if we use them regularly, but admit
-that for WarpWallets passphrases, used a couple of times per decade, might be
-harder to pull off.  We internally discussed lots of other systems, like
+One can memorize passphrases like these if used them regularly, but since
+WarpWallets are used a couple of times per decade, you're at risk of forgetting.
+We internally discussed easier-to-remember password systems, like
 interwoven lines from famous poems, words you made up when you were a kid,
 etc. Here, you are into the realm of security-by-obscurity, which for this
-application is probably OK.  Just whichever  system you pick should look like
+application is probably OK.  Just whichever system you pick should look like
 the concatenation of random words to an attacker who doesn't know your secret
-algorithm. For instance, just picking a single line from an obscure poem isn't
-a great idea, since a random passphrase generator would never spit that out.
+algorithm. For instance, picking a single line from an obscure poem isn't
+a great idea, since words 3 through 10 probably supply almost no entropy.  Concatenating
+the 13th word of eight of your favorite poems will look a lot more random.
 
 ### Why This System Has the Other Three Properties
 
@@ -170,7 +175,7 @@ you mess it up.  The mistakes we can think of are:
 
 1. You forget your passphrase
 1. You mistakenly publish your secret key or your passphrase.
-1. The WarpWallet code disappears of become unexecutable.
+1. The WarpWallet code disappears or becomes unexecutable.
 1. Your browser has some sort of bug and you get the wrong answer
 
 We've covered passphrase forgetting and reminders above.  And you do need to work slowly to avoid careless mistakes
@@ -185,12 +190,13 @@ checked that we got the same answers.  To run our tests, check out [the
 repository](https://github.com/keybase/warpwallet) and run `npm install -d;
 make test`.
 
-Still, you should take further precautions.  After transfering the HTML to your air-gapped machine
-in Step 3 above, run some tests.  Pick some throw-away passwords and hash them both on your 
-networked machine and your air-gapped machine.  If that checks out, then generate a temporary
-password, transfer a small amount of coin to WarpWallet, and then the following day, transfer
-the coin back.  Run these tests as many times as you need to feel comfortable, and then 
-pull the trigger.
+Still, you should take further precautions.  After transfering the HTML to
+your air-gapped machine in Step 3 above, run some tests.  Pick some throw-away
+passwords and hash them both on your  networked machine and your air-gapped
+machine.  If that checks out, and the results match, then generate a temporary
+password, transfer a small amount of coin to WarpWallet, and then the
+following day, transfer the coin back.  Run these tests as many times as you
+need to feel comfortable, and then  pull the trigger.
 
 ### Survey of Other Systems
 
@@ -223,18 +229,18 @@ customers of their savings.
 Anyone with a cable modem and some extra storage space can run their own
 wallet (either [full](http://bitcoin.org/en/download) or
 [thin](https://electrum.org/)). Running your own wallet makes sense if you
-transact frequently, but leaves your vulnerable for long-term storage. It's
-susceptible to both theft and loss Unencrypted backups trade-off loss-
-resilience for theft-resilience. Perhaps the sweet-spot here is encrypted
-backups, and we came close to advocating that system before we came to the
-realization that  we'd only feel comfortable with encrypted backups if they
-were copied to many different places, and at that point, it's the encryption
-and not ownership of the encrypted data file that's  keeping our coin safe.
-So in other words, you'd still have to remember a good passphrase,
-and in addition choose a good encryption system, manage files properly,
-and convince yourself that you'll be able to decrypt when necessary.  This
-felt like a lot of extra machinery that might eventually compromise 
-recoverability of the coin without providing additional security.
+transact frequently, but leaves your long-term storage vulnerable, since your
+coin is susceptible to both theft and loss. Unencrypted backups trade-off
+loss-resilience for theft-resilience. Perhaps the sweet-spot here is
+encrypted backups. We came close to advocating that system before we
+realized we'd only feel comfortable with encrypted backups if
+they were copied to many different places. At that point, it's the
+encryption---and not possession of the encrypted file ----that keeps your
+coin safe. So in other words, you'd still have to remember a good passphrase,
+and in addition choose a good encryption system, manage files properly, and
+convince yourself that you'll be able to decrypt when necessary.  This felt
+like a lot of extra machinery that might eventually hinder recoverability
+without providing additional security.
 
 
 #### Paper Wallets and Offline USB Sticks
@@ -260,7 +266,7 @@ Other brain wallets predated and inspired Warp, but don't enforce salting, and
 lack key-stretching via scrypt. Some implementations are [scams](http://www.re
 ddit.com/r/Bitcoin/comments/1c13ld/i_invested_all_of_my_bitcoin_to_a_brain_wal
 let/); [others](https://www.bitaddress.org) are honest but when combined with
-[guessible passphrases](http://www.reddit.com/r/Bitcoin/comments/1ptuf3/)
+[guessible passphrases](http://www.reddit.com/r/Bitcoin/comments/1ptuf3/) are
 insecure.
 
 ## Summary
