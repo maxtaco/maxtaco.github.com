@@ -57,10 +57,10 @@ the full algorithm for storing your wealth:
 
 1. Buy your retirement coins on [Coinbase](https://coinbase.com) or the exchange of
 your choosing.
-1. Boot up your air-gapped machine (AGM), preferably from a Linux live disk.
 1. Visit [WarpWallet](https://keybase.io/warp) and note the SHA-256 sum in the URL after the redirect
+1. Boot up your air-gapped machine (AGM), preferably from a Linux live disk.
 1. Copy the HTML to your AGM using a USB-stick.
-1. Run `sha256sum warp.html` and verify that the sum matches the sum you observed in step 3.
+1. Run `sha256sum warp.html` and verify that the sum matches the sum you observed in step 2.
 1. Open the HTML as a local file with Chrome or Firefox.  
     1. Test the configuration with a few temporary passphrases and small transfers (see below for more details).
     1. Pick a good passphrase. For example: `vicar formal lubbers errata mutton`.  More on this later.
@@ -77,7 +77,7 @@ again.
 
 ### Security Analysis
 
-There are three main attacks an adversary can attempt to steal your coin: (1) infiltrate your 
+There are four main attacks an adversary can attempt to steal your coin: (1) infiltrate your 
 machines; (2) break WarpWallet's cryptography; (3) brute-force your password; or (4)
 guess your passphrase from your little "reminder" notes.  Let's look at
 all four:
@@ -89,7 +89,12 @@ the attacker access to your public key, but that won't allow a theft of your coi
 as the Bitcoin protocol holds.  Of course, an attacker who controls your networked machine
 can also move your coin out of a Coinbase to an account of his choosing, but assuming you can
 transfer your coin to a WarpWallet before him, you are in the clear.  If you lose the race,
-we of course can't help, welcome to the brotherhood of the burgled.
+we of course can't help, welcome to the brotherhood of the burgled. Similarly, if the attacker
+controls all code running on all of your machines, you might not be able to run the
+real version of WarpWallet and instead might have trojaned version that only outputs
+keys that the attacker knows.  We don't have a great answer to this attack other than
+to check your version of WarpWallet against other machines, either by cryptographic
+hash, or by checking known input/output pairs.
 
 The next attack to consider is a break of WarpWallet's cryptography.  WarpWallet works as follows:
 
