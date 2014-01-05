@@ -135,7 +135,7 @@ cushion of PBKDF2 while you change to a different scheme.
 Practically speaking, there's an outstanding public challenge to test the
 security of  WarpWallet. When the site was announced, we included 4 challenges
 that we knew to be solvable in short order, to prove that people would take
-the challenges seriously.  They did. The remaining challenge it to guess an
+the challenges seriously.  They did. The remaining challenge is to guess an
 address with only 48 bits of entropy, and is 
 [uncracked](https://blockchain.info/address/1AdU3EcimMFN7JLJtceSyrmFYE3gF5ZnGj) 
 since November 2013.
@@ -263,4 +263,7 @@ let/); [others](https://www.bitaddress.org) are honest but when combined with
 [guessible passphrases](http://www.reddit.com/r/Bitcoin/comments/1ptuf3/)
 insecure.
 
+## Summary
 
+Use WarpWallet and follow our step-by-step directions above to store your
+coin for the long haul.
