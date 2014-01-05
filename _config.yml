@@ -81,6 +81,7 @@ JB :
   #
   comments :
     provider : disqus
+    provider : false
     disqus :
       short_name : jekyllbootstrap
     livefyre :

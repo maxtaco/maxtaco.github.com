@@ -4,6 +4,8 @@ title: "How to Store your Bitcoin for the Long Haul"
 description: "Keep your bitcoin safe from theft and loss; directions how"
 category: bitcoin
 tags: [bitcoin, warpwallet, security]
+page:
+  comments : false
 ---
 {% include JB/setup %}
 
