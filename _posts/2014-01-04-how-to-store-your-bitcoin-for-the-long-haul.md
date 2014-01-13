@@ -49,16 +49,16 @@ Achieving all four of these goals simultaneously is challenging, and most system
 looked at fell short on at least one of these axes.  We'll cover those later in this
 article, but first, we recommend a scheme to store your retirement coin, which is:
 
-### A Brain-Wallet
+### A Brainwallet
 
-A brain wallet is an open algorithm that deterministically and statelessly
-converts a secret passphrase into public/private key pair.  Typically, brain
-wallet algorithms are quite simple:
+A brainwallet is an open algorithm that deterministically and statelessly
+converts a secret passphrase into public/private key pair.  Typically, brainwallet 
+algorithms are quite simple:
 
 1. Use SHA-256 to hash a passphrase into a 256-bit string that appears random
 to those who do not know the passphrase.
 1. Interpret this output as a secret key
-1. Use standard EC crypto to convert the secret key to a public key.
+1. Use standard EC crypto to map this secret key to a public key.
 
 [Brainwallets](https://www.bitaddress.org) score highly on criteria 2 through 4, but have a
 a reputation for 
@@ -77,16 +77,16 @@ compromised password databases.  And indeed, brainwallets are insecure for the
 same reason that unsalted, unhashed password databases are insecure.  Therefore,
 brainwallets ought to employ the same security measures as pasword databases:
 
-### A Security-Enhanced *Brain Wallet*
+### A Security-Enhanced *Brainwallet*
 
-We built [WarpWallet](https://keybase.io/warp), a security-enhanced brain wallet
+We built [WarpWallet](https://keybase.io/warp), a security-enhanced brainwallet
 implemented as a standalone Web page. WarpWallet is more secure that standard 
-brain-wallets for two simple reasons: (1) it requests that each user picks a unique "salt"
+brainwallets for two simple reasons: (1) it requests that each user picks a unique "salt"
 so that an adversary needs to crack each user's brainwallet individually; and (2),
 it hashes secret passphrases using a [computationally expensive algorithm](http://www.tarsnap.com/scrypt.html),
 so that each guess by the adversary is expensive to compute.
 
-With this WarpWallet primitive, we can present the full algorithm for storing wealth:
+With this WarpWallet primitive, here is the full algorithm for storing wealth:
 
 1. Buy your retirement coins on [Coinbase](https://coinbase.com) or the exchange of
 your choosing.
@@ -97,16 +97,14 @@ your choosing.
 1. Open the HTML as a local file with Chrome or Firefox.  
     1. Test the configuration with a few temporary passphrases and small transfers (see below for more details).
     1. Pick a good passphrase. For example: `vicar formal lubbers errata mutton`.  More on this later.
-    1. Run the configuration in "production", with your real passphrase. Use your email address as your "salt".  You'll
-       get a public/private key pair out.
+    1. Run the configuration in "production", with your real passphrase. Use your email address as your "salt".  You'll get a public/private key pair out.
 1. Use your phone to scan the public key, and transfer it to your networked machine (via email, for example). When scanning, be careful to resize your browser window so that only the public QR code is visible.
 1. Turn off the air-gapped machine.
 1. On your networked machine, transfer coin from Coinbase to the WarpWallet-generated address.
 1. Leave little cryptic notes around your house and office to remind you of what your passphrase is in case you ever forget
 
-
-To redeem your coin, repeat the process, but transfer over the private key.  Once you redeem a WarpWallet, never use it
-again.
+To redeem your coin, repeat the process, but transfer over the private key.  Once you redeem a WarpWallet, never use it again. (Alternatively, you can use Bitcoin libraries to sign an transaction on your airgapped machine,
+transfer it to your networked machine, and [inject it](https://blockchain.info/pushtx) into the blockchain; we have yet to implement this.)
 
 ### Security Analysis
 
@@ -143,15 +141,7 @@ The next attack to consider is a break of WarpWallet's cryptography.  WarpWallet
 A crypto break would allow an adversary to compute `keypair` from a candidate
 `passphrase` and `salt` more efficiently than running `scrypt` and `PBKDF2` in
 the forward-direction.  In other words, it would make his brute-force  attack
-more efficient. So the question to consider is how feasible a brute-
-force attack is. The attack works as follows:
-
-
-The first observation about a brute-force attack on WarpWallet is that it has to be tailored
-to a particular e-mail address.  So a traditional "Rainbow Table" won't fly here.  In the end,
-the adversary's ability to generate keypairs from passphrases limits the success of his attack.
-If he finds a break in both `scrypt` and `PBKDF2`, he can generate millions a second.  If 
-one or both schemes remains secure, the generation rate plummets.
+more efficient.
 
 We can quantify security under the assumption that `scrypt` is secure, and the `PBKDF2`
 step is free.  Note that WarpWallet uses security parameter 2<sup>18</sup>, and the Litecoin
@@ -287,11 +277,6 @@ can, for instance, split your wallet up into 7 pieces, any 4 of which can be rea
 recreate the wallet.  Imagine keeping some shares for yourself, storing some in your office, and
 leaving some with your family or mates.  Such solutions seem elegant in priniciple but 
 error-prone in practice. 
-
-#### The "Brain Wallet"
-
-Other brain wallets predated and inspired Warp, but don't enforce salting, and
-insecure.
 
 ## Summary
 
