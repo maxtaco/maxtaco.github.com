@@ -9,6 +9,26 @@ page:
 ---
 {% include JB/setup %}
 
+<script>
+
+var params = {
+	difficulty : 3891,
+	block_reward : 50,
+	scrypt_c : {
+		litecoin : Math.pow(2,10),
+		warp : Math.pow(2,18)
+	}
+};
+function expected_hashes_per_block (params) {
+	return ((params.difficulty / 0xffff) * Math.pow(2,48));
+}
+function expected_ltc_per_hash (params) {
+	return params.block_reward/expected_hashes_per_block(params);
+};
+
+</script>
+
+
 ### Abstract
 
 We discuss how to store bitcoin reliably and securely for the long-haul.
