@@ -22,7 +22,7 @@ We discuss how to store bitcoin reliably and securely for the long-haul.
 ### Intro
 
 If you want to invest in bitcoin for the long-haul, you should address the thorny
-problem of how best to store them.  Since people love stealing bitcoins
+issue of how best to store them.  Since people love stealing bitcoins
 from others more than just about anything else in this world, all storage
 systems must first and foremost:
 
@@ -49,13 +49,44 @@ Achieving all four of these goals simultaneously is challenging, and most system
 looked at fell short on at least one of these axes.  We'll cover those later in this
 article, but first, we recommend a scheme to store your retirement coin, which is:
 
+### A Brain-Wallet
+
+A brain wallet is an open algorithm that deterministically and statelessly
+converts a secret passphrase into public/private key pair.  Typically, brain
+wallet algorithms are quite simple:
+
+1. Use SHA-256 to hash a passphrase into a 256-bit string that appears random
+to those who do not know the passphrase.
+1. Interpret this output as a secret key
+1. Use standard EC crypto to convert the secret key to a public key.
+
+[Brainwallets](https://www.bitaddress.org) score highly on criteria 2 through 4, but have a
+a reputation for 
+[being](http://www.reddit.com/r/Bitcoin/comments/1c13ld/i_invested_all_of_my_bitcoin_to_a_brain_wallet/)
+[insecure](http://www.reddit.com/r/Bitcoin/comments/1ptuf3/). The classic attack against
+a brainwallet is to:
+
+1. Generate a huge dictionary of possible passphrases, pulled from literature, popular password
+databases, movie lines, song lyrics, etc.
+1. For each phrase in the corpus, generate a brain wallet key pair using the above algorithm.
+1. Watch the block chain for transfers sent to public addresses in the precomputed database.
+1. On a hit, use the corresponding private key to transfer the coin.
+
+This attack should look familiar; it's nearly the same attack used to crack
+compromised password databases.  And indeed, brainwallets are insecure for the
+same reason that unsalted, unhashed password databases are insecure.  Therefore,
+brainwallets ought to employ the same security measures as pasword databases:
+
 ### A Security-Enhanced *Brain Wallet*
 
-A brain wallet is an open algorithm that deterministically converts a
-secret passphrase into public/private key pair.  We found existing
-brainwallets lacking, so we built [WarpWallet](https://keybase.io/warp), a
-security-enhanced brain wallet implemented as a standalone Web page.  Here is
-the full algorithm for storing your wealth:
+We built [WarpWallet](https://keybase.io/warp), a security-enhanced brain wallet
+implemented as a standalone Web page. WarpWallet is more secure that standard 
+brain-wallets for two simple reasons: (1) it requests that each user picks a unique "salt"
+so that an adversary needs to crack each user's brainwallet individually; and (2),
+it hashes secret passphrases using a [computationally expensive algorithm](http://www.tarsnap.com/scrypt.html),
+so that each guess by the adversary is expensive to compute.
+
+With this WarpWallet primitive, we can present the full algorithm for storing wealth:
 
 1. Buy your retirement coins on [Coinbase](https://coinbase.com) or the exchange of
 your choosing.
@@ -115,11 +146,6 @@ the forward-direction.  In other words, it would make his brute-force  attack
 more efficient. So the question to consider is how feasible a brute-
 force attack is. The attack works as follows:
 
-1. Generate a huge dictionary of possible passphrases, pulled from literature, popular password
-databases, movie lines, song lyrics, etc.
-1. For each phrase in the corpus, generate a brain wallet key pair using the above algorithm.
-1. Watch the block chain for transfers sent to public addresses in the precomputed database.
-1. On a hit, use the corresponding private key to transfer the coin.
 
 The first observation about a brute-force attack on WarpWallet is that it has to be tailored
 to a particular e-mail address.  So a traditional "Rainbow Table" won't fly here.  In the end,
@@ -265,10 +291,6 @@ error-prone in practice.
 #### The "Brain Wallet"
 
 Other brain wallets predated and inspired Warp, but don't enforce salting, and
-lack key-stretching via scrypt. Some implementations are [scams](http://www.re
-ddit.com/r/Bitcoin/comments/1c13ld/i_invested_all_of_my_bitcoin_to_a_brain_wal
-let/); [others](https://www.bitaddress.org) are honest but when combined with
-[guessible passphrases](http://www.reddit.com/r/Bitcoin/comments/1ptuf3/) are
 insecure.
 
 ## Summary
