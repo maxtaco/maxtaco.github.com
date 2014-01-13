@@ -1,0 +1,6 @@
+https://litecoin.info/Difficulty
+  1. E[# of hashes] = D * 2**48 / 0xffff, for difficulty D
+
+http://bitcoinwisdom.com/litecoin/difficulty
+  1. Difficulty now is 3891
+  1. With 50 LTC per block payoff
