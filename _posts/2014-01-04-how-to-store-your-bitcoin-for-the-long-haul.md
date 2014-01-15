@@ -10,7 +10,7 @@ page:
 {% include JB/setup %}
 
 <script>
-
+<!--
 var params = {
 	difficulty : 3891,
 	block_reward : 50,
@@ -26,6 +26,7 @@ function expected_ltc_per_hash (params) {
 	return params.block_reward/expected_hashes_per_block(params);
 };
 
+-->
 </script>
 
 
@@ -111,7 +112,9 @@ With this WarpWallet primitive, here is the full algorithm for storing wealth:
 1. Buy your retirement coins on [Coinbase](https://coinbase.com) or the exchange of
 your choosing.
 1. Visit [WarpWallet](https://keybase.io/warp) and note the SHA-256 sum in the URL after the redirect
-1. Boot up your air-gapped machine (AGM), preferably from a Linux live disk.
+1. Boot up your air-gapped machine (AGM), preferably from a Linux live disk. (See
+  [Bruce Schneier's article](https://www.schneier.com/blog/archives/2013/10/air_gaps.html)
+  for more information on maintainig an AGM.)
 1. Copy the HTML to your AGM using a USB-stick.
 1. Run `sha256sum warp.html` on the AGM to verify that the sum matches the sum you observed in step 2.
 1. Open the HTML as a local file with Chrome or Firefox.  
@@ -121,7 +124,7 @@ your choosing.
 1. Use your phone to scan the public key, and transfer it to your networked machine (via email, for example). When scanning, be careful to resize your browser window so that only the public QR code is visible.
 1. Turn off the air-gapped machine.
 1. On your networked machine, transfer coin from Coinbase to the WarpWallet-generated address.
-1. Leave little cryptic notes around your house and office to remind you of what your passphrase is in case you ever forget
+1. Leave little cryptic notes around your house and office to remind you of what your passphrase is in case you ever forget.
 
 To redeem your coin, repeat the process, but transfer over the private key.  Once you redeem a WarpWallet, never use it again. (Alternatively, you can use Bitcoin libraries to sign an transaction on your airgapped machine,
 transfer it to your networked machine, and [inject it](https://blockchain.info/pushtx) into the blockchain; we have yet to implement this.)
