@@ -9,23 +9,73 @@ page:
 ---
 {% include JB/setup %}
 
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+<!--
+-->  
+</script>
+
 <script>
 <!--
-var params = {
-	difficulty : 3891,
-	block_reward : 50,
-	scrypt_c : {
-		litecoin : Math.pow(2,10),
-		warp : Math.pow(2,18)
-	}
-};
 function expected_hashes_per_block (params) {
 	return ((params.difficulty / 0xffff) * Math.pow(2,48));
 }
 function expected_ltc_per_hash (params) {
-	return params.block_reward/expected_hashes_per_block(params);
+	return params.block_reward/Math.max(expected_hashes_per_block(params), 1);
 };
-
+function usd_cost_per_hash (params) {
+  return expected_ltc_per_hash(params) * params.usd_price;
+};
+function usd_cost_per_warp_wallet_guess (params) {
+  return usd_cost_per_hash(params) * params.scrypt_c.warp / params.scrypt_c.litecoin;
+};
+function usd_cost_to_break_wallet (params) {
+  return Math.pow(2,params.entropy-1)*usd_cost_per_warp_wallet_guess(params);
+};
+function usd_cost_to_break_wallet_pp (params) {
+  var n = usd_cost_to_break_wallet(params);
+  var cents = Math.round((n*100)%100);
+  var thous = []
+  n = Math.floor(n);
+  function pad(x) {
+    x = "" + x;
+    while (x.length < 3) {
+      x = "0" + x;
+    }
+    return x;
+  };
+  while (n >= 1000) {
+    var v = n % 1000;
+    n = Math.floor(n/1000);
+    thous.push(pad(v));
+  }
+  if (n > 0) { thous.push(n); }
+  thous.reverse();
+  return "$" + thous.join(",") + "." + cents;
+};
+function get_params() {
+  var F = function (x) { return +$("#" + x).val(); }
+  return {
+    usd_price : F("usd_price"),
+    block_reward : F("block_reward"),
+    difficulty : F("difficulty"),
+    entropy : F("entropy"),
+    scrypt_c : {
+       litecoin : Math.pow(2,10),
+        warp : Math.pow(2,18)
+    }
+  };
+};
+function compute() {
+  $("#usd_break_cost").html(usd_cost_to_break_wallet_pp(get_params()));
+}
+$(function () { 
+  compute(); 
+  var inputs = [ "usd_price", "block_reward", "difficulty", "entropy" ];
+  for (var i in inputs) {
+    var input = inputs[i];
+    $("body").on("keyup", "#" + input, function () { compute(); })
+  }
+});
 -->
 </script>
 
@@ -39,6 +89,8 @@ We discuss how to store bitcoin reliably and securely for the long-haul.
 1. One networked machine
 1. One "air-gapped" old laptop, preferably without any wireless capabilities.
 1. A smartphone with a barcode scanner.
+
+<span></span>
 
 ### Intro
 
@@ -98,20 +150,21 @@ compromised password databases.  And indeed, brainwallets are insecure for the
 same reason that unsalted, unhashed password databases are insecure.  Therefore,
 brainwallets ought to employ the same security measures as pasword databases:
 
-### A Security-Enhanced *Brainwallet*
+### A *Security-Enhanced* Brainwallet
 
 We built [WarpWallet](https://keybase.io/warp), a security-enhanced brainwallet
 implemented as a standalone Web page. WarpWallet is more secure that standard 
 brainwallets for two simple reasons: (1) it requests that each user picks a unique "salt"
 so that an adversary needs to crack each user's brainwallet individually; and (2),
-it hashes secret passphrases using a [computationally expensive algorithm](http://www.tarsnap.com/scrypt.html),
+it hashes secret passphrases using [scrypt](http://www.tarsnap.com/scrypt.html)
 so that each guess by the adversary is expensive to compute.
 
 With this WarpWallet primitive, here is the full algorithm for storing wealth:
 
 1. Buy your retirement coins on [Coinbase](https://coinbase.com) or the exchange of
 your choosing.
-1. Visit [WarpWallet](https://keybase.io/warp) and note the SHA-256 sum in the URL after the redirect
+1. Visit [WarpWallet](https://keybase.io/warp) and note the SHA-256 sum in the URL after the redirect.
+Save the HTML to a file.
 1. Boot up your air-gapped machine (AGM), preferably from a Linux live disk. (See
   [Bruce Schneier's article](https://www.schneier.com/blog/archives/2013/10/air_gaps.html)
   for more information on maintainig an AGM.)
@@ -145,8 +198,7 @@ but that won't allow a theft of your coin as long as the Bitcoin protocol
 holds.  Of course, an attacker who controls your networked machine can also
 move your coin out of a Coinbase to an account of his choosing, but assuming
 you can transfer your coin to a WarpWallet before him, you are in the clear.
-If you lose the race, we of course can't help, welcome to the brotherhood of
-the burgled. Similarly, if the attacker controls all code running on all of
+Similarly, if the attacker controls all code running on all of
 your machines, you might not be able to run the real version of WarpWallet and
 instead might have trojaned version that only outputs keys that the attacker
 knows.  We don't have a great answer to this attack other than to check your
@@ -155,27 +207,73 @@ by checking known input/output pairs.
 
 The next attack to consider is a break of WarpWallet's cryptography.  WarpWallet works as follows:
 
-1. Generate `s1`	= scrypt(key=`passphrase||0x1`, salt=`salt||0x1`, N=2<sup>18</sup>, r=8, p=1, dkLen=32)
-1. Generate `s2`	= PBKDF2(key=`passphrase||0x2`, salt=`salt||0x2`, c=2<sup>16</sup>, dkLen=32, prf=HMAC_SHA256)
-1. Assign `private_key` = `s1` ⊕ `s2`
-1. Generate `public_key` from `private_key` using standard Bitcoin EC crypto.
-1. Output `keypair` = (`private_key`, `public_key`)
+1. `s1` &#8592; scrypt(key=`passphrase||0x1`, salt=`salt||0x1`, N=2<sup>18</sup>, r=8, p=1, dkLen=32)
+1. `s2`	&#8592; PBKDF2(key=`passphrase||0x2`, salt=`salt||0x2`, c=2<sup>16</sup>, dkLen=32)
+1. `private_key` &#8592; `s1` &oplus; `s2`
+1. Generate `public_key` from `private_key` using standard Bitcoin EC crypto
+1. Output (`private_key`, `public_key`)
 
-A crypto break would allow an adversary to compute `keypair` from a candidate
-`passphrase` and `salt` more efficiently than running `scrypt` and `PBKDF2` in
-the forward-direction.  In other words, it would make his brute-force  attack
-more efficient.
+We claim without formal proof that this algorithm is as strong as the stronger
+of scrypt and [PBKDF2](http://en.wikipedia.org/wiki/PBKDF2).
+As long as one of those algorithms remains secure, a
+brute-force attack is necessary to derive keypairs from candidate passphrases.
 
-We can quantify security under the assumption that `scrypt` is secure, and the `PBKDF2`
-step is free.  Note that WarpWallet uses security parameter 2<sup>18</sup>, and the Litecoin
+#### Security Against a Brute-Force Attack
+
+To quantify security against a brute-force attack, we make the following assumptions:
+
+1. scrypt is unbroken and must be brute-forced.
+1. PBKDF2 is free
+1. An adversary can use resources either to break a WarpWallet or to 
+mine [Litecoins](https://litecoin.org).  Therefore, the opportunity cost of breaking a WarpWallet
+is the Litecoins the advesary could have earned by mining. This assumption
+neatly considers hardware and energy costs, and allows the attacker
+to access the latest software improvements.
+
+Note that WarpWallet uses security parameter 2<sup>18</sup>, and the Litecoin
 system [uses](https://litecoin.info/Comparison_between_Litecoin_and_Bitcoin) 2<sup>10</sup>.
-At the time of writing, the maximally observed [hashing rate](https://litecoin.info/Mining_hardware_comparison)
-for Litecoin is 1.5MH/s with a [$900 graphics card](http://www.newegg.com/Product/Product.aspx?Item=N82E16814127735).
-Such a setup could compute WarpWallet addresses at 2<sup>20.53-8-9.81</sup> = 2<sup>2.72</sup> hashes/second/dollar, _assuming energy and supporting hardware is free_.  So an adversary who buys $67 million worth of high-end graphics cards could compute
-2<sup>28.72</sup> hashes per second, and could guess a passphrase with 58 bits of entropy (such as the one above) in about
-10 years.  That's a comfortable security margin for now.  If there's a news report
-that scrypt is broken, or of a significant reduction in hardware cost, you still have the 
-cushion of PBKDF2 while you change to a different scheme.
+Our analysis uses the following constants, but you can edit them as 
+market conditions change:
+
+<div>
+<table>
+<tr>
+   <td width="30">&nbsp;</td>
+   <td>Price per Litecoin in USD</td>
+   <td width="20">&nbsp;</td>
+   <td> <input style="width: 60px" id="usd_price" value="24.389"></input></td>
+</tr>
+<tr>
+   <td width="30">&nbsp;</td>
+   <td>Litecoin Block Reward</td>
+   <td width="20">&nbsp;</td>
+   <td><input style="width: 60px" id="block_reward" value="50"></input></td>
+</tr>
+<tr>
+   <td width="30">&nbsp;</td>
+   <td>Litecoin Difficulty</td>
+   <td width="20">&nbsp;</td>
+   <td><input style="width: 60px" id="difficulty" value="3891"></input></td>
+</tr>
+<tr>
+    <td width="30">&nbsp;</td>
+    <td>Bits of WarpWallet Passphrase Entropy</td>
+    <td width="20">&nbsp;</td>
+    <td><input style="width: 60px" id="entropy" value="58"></input></td>
+</tr>
+</table>
+</div>
+
+With these assumptions, the cost to break a WarpWallet is
+<span id="usd_break_cost" style="font-weight: bold; color: red">x</span>.
+(See this page's JS source to check our computations).
+
+
+#### Practical Security
+
+That's a comfortable security margin for now.  If there's a news report that
+scrypt is broken, or of a significant reduction in hardware cost, you still
+have the  cushion of PBKDF2 while you change to a different scheme.
 
 Practically speaking, there's an outstanding public challenge to test the
 security of  WarpWallet. When the site was announced, we included 4 challenges
@@ -200,8 +298,8 @@ One can memorize passphrases like these if used them regularly, but since
 WarpWallets are used a couple of times per decade, you're at risk of forgetting.
 We internally discussed easier-to-remember password systems, like
 interwoven lines from famous poems, words you made up when you were a kid,
-etc. Here, you are into the realm of security-by-obscurity, which for this
-application is probably OK.  Just whichever system you pick should look like
+etc. Here, you are into the realm of security-by-obscurity.
+Whichever system you pick should look like
 the concatenation of random words to an attacker who doesn't know your secret
 algorithm. For instance, picking a single line from an obscure poem isn't
 a great idea, since words 3 through 10 probably supply almost no entropy.  Concatenating
@@ -210,7 +308,7 @@ the 13th word of eight of your favorite poems will look a lot more random.
 ### Why This System Has the Other Three Properties
 
 The WarpWallet protocol described above should be secure. It is certainly free
-and accessible from anywhere in the world with internet in a bind. The biggest question is will 
+and accessible from almost anywhere in the world in a bind. The biggest question is will 
 you mess it up.  The mistakes we can think of are:
 
 1. You forget your passphrase
@@ -231,7 +329,7 @@ repository](https://github.com/keybase/warpwallet) and run `npm install -d;
 make test`.
 
 Still, you should take further precautions.  After transfering the HTML to
-your air-gapped machine in Step 3 above, run some tests.  Pick some throw-away
+your air-gapped machine in Step 4 above, run some tests.  Pick some throw-away
 passwords and hash them both on your  networked machine and your air-gapped
 machine.  If that checks out, and the results match, then generate a temporary
 password, transfer a small amount of coin to WarpWallet, and then the
@@ -275,7 +373,7 @@ loss-resilience for theft-resilience. Perhaps the sweet-spot here is
 encrypted backups. We came close to advocating that system before we
 realized we'd only feel comfortable with encrypted backups if
 they were copied to many different places. At that point, it's the
-encryption---and not possession of the encrypted file ----that keeps your
+encryption---and not possession of the encrypted file---that keeps your
 coin safe. So in other words, you'd still have to remember a good passphrase,
 and in addition choose a good encryption system, manage files properly, and
 convince yourself that you'll be able to decrypt when necessary.  This felt
