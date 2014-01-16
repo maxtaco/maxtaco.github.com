@@ -53,7 +53,7 @@ function get_params() {
 }
 
 function compute() {
-	$("#usd_break_cost").html(usd_pp(usd_cost_to_break_wallet_pp(get_params())));
+	$("#usd_break_cost").html(usd_pp(usd_cost_to_break_wallet(get_params())));
 }
 
 $(function () { 
