@@ -14,7 +14,8 @@ page:
 -->  
 </script>
 
-<script>//<!--
+<script>
+//<![CDATA[
 function expected_hashes_per_block (params) {
 	return ((params.difficulty / 0xffff) * Math.pow(2,48));
 }
@@ -75,7 +76,7 @@ $(function () {
     $("body").on("keyup", "#" + input, function () { compute(); })
   }
 });
--->
+//]]>
 </script>
 
 
