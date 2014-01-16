@@ -201,7 +201,7 @@ market conditions change:
 
 With these assumptions, the cost to break a WarpWallet is
 <span id="usd_break_cost" style="font-weight: bold; color: red">x</span>.
-(See this page's JS source to check our computations).
+(See this page's [JS source](http://maxtaco.github.io/assets/js/bitcoin.js) to check our computations).
 
 
 #### Practical Security
