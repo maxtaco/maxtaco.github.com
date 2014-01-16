@@ -119,7 +119,7 @@ your choosing.
 1. Run `sha256sum warp.html` on the AGM to verify that the sum matches the sum you observed in step 2.
 1. Open the HTML as a local file with Chrome or Firefox.  
     1. Test the configuration with a few temporary passphrases and small transfers (see below for more details).
-    1. Pick a good passphrase. For example: `vicar formal lubbers errata mutton`.  More on this later.
+    1. Pick a good passphrase. For example: `vicar formal lubbers errata`.  More on this later.
     1. Run the configuration in "production", with your real passphrase. Use your email address as your "salt".  You'll get a public/private key pair out.
 1. Use your phone to scan the public key, and transfer it to your networked machine (via email, for example). When scanning, be careful to resize your browser window so that only the public QR code is visible.
 1. Turn off the air-gapped machine.
@@ -158,7 +158,7 @@ The next attack to consider is a break of WarpWallet's cryptography.  WarpWallet
 1. Generate `s1`	= scrypt(key=`passphrase||0x1`, salt=`salt||0x1`, N=2<sup>18</sup>, r=8, p=1, dkLen=32)
 1. Generate `s2`	= PBKDF2(key=`passphrase||0x2`, salt=`salt||0x2`, c=2<sup>16</sup>, dkLen=32, prf=HMAC_SHA256)
 1. Assign `private_key` = `s1` ⊕ `s2`
-1. Generate `public_key` from `private_key` using standing Bitcoin EC crypto.
+1. Generate `public_key` from `private_key` using standard Bitcoin EC crypto.
 1. Output `keypair` = (`private_key`, `public_key`)
 
 A crypto break would allow an adversary to compute `keypair` from a candidate
@@ -171,10 +171,9 @@ step is free.  Note that WarpWallet uses security parameter 2<sup>18</sup>, and 
 system [uses](https://litecoin.info/Comparison_between_Litecoin_and_Bitcoin) 2<sup>10</sup>.
 At the time of writing, the maximally observed [hashing rate](https://litecoin.info/Mining_hardware_comparison)
 for Litecoin is 1.5MH/s with a [$900 graphics card](http://www.newegg.com/Product/Product.aspx?Item=N82E16814127735).
-Such a setup could compute WarpWallet addresses at 2<sup>20.53-8-9.81</sup> = 2<sup>2.72</sup> hashes/second/dollar, assuming
-energy and supporting hardware is free.  So an adversary who buys $134 million worth of high-end graphics cards could compute 
-2<sup>29.72</sup> hashes per second, and could guess a passphrase with 72 bits of entropy (such as the one above) in about
-84,667 years.  That's a comfortable security margin for now.  If there's a news report
+Such a setup could compute WarpWallet addresses at 2<sup>20.53-8-9.81</sup> = 2<sup>2.72</sup> hashes/second/dollar, _assuming energy and supporting hardware is free_.  So an adversary who buys $67 million worth of high-end graphics cards could compute
+2<sup>28.72</sup> hashes per second, and could guess a passphrase with 58 bits of entropy (such as the one above) in about
+10 years.  That's a comfortable security margin for now.  If there's a news report
 that scrypt is broken, or of a significant reduction in hardware cost, you still have the 
 cushion of PBKDF2 while you change to a different scheme.
 
