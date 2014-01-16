@@ -14,8 +14,7 @@ page:
 -->  
 </script>
 
-<script>
-<!--
+<script>//<!--
 function expected_hashes_per_block (params) {
 	return ((params.difficulty / 0xffff) * Math.pow(2,48));
 }
