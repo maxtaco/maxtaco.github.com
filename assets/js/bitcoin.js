@@ -62,5 +62,6 @@ $(function () {
 	for (var i in inputs) {
 		var input = inputs[i];
 		$("body").on("keyup", "#" + input, function () { compute(); })
+		$("body").on("change", "#" + input, function () { compute(); })
 	}
 });
