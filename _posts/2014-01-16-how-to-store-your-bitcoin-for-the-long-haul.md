@@ -14,6 +14,16 @@ page:
 <script type="text/javascript" src="http://maxtaco.github.io/assets/js/bitcoin.js"> 
 </script>
 
+<style>
+div.goal {
+  border: 1px solid;
+  margin: 20px;
+  padding: 8px;
+  text-align: center;
+  background-color: #ff9;
+}
+</style>
+
 
 ### Abstract
 
@@ -34,22 +44,30 @@ issue of how best to store them.  Since people love stealing bitcoins
 from others more than just about anything else in this world, all storage
 systems must first and foremost:
 
-     1. Prevent others from stealing your coin
+<div class="goal">
+     (1) Prevent others from stealing your coin
+</div>   
 
 The easiest way to achieve this goal is simply to destroy your private keys.
 So there must be a yin to requirement #1's yang, which is to:
 
-     2. Avoid accidental loss
+<div class="goal">
+     (2) Avoid accidental loss
+</div>
 
 Storing bitcoin shouldn't rob them of their best properties.  So in
 addition, good bitcoin storage should:
 
-     3. Be low-cost
+<div class="goal">
+     (3) Be low-cost
+</div>
 
 And in case you need to leave the country in a hurry, or if you inexplicably
 wash up naked on a foreign shore, your coin should:
 
-     4. Be globally accessible
+<div class="goal">
+     (4) Be globally accessible
+</div>
 
 We realize #4 is ridiculous, but still, it's fun to think about.
 
