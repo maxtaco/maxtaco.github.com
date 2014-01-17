@@ -11,21 +11,12 @@ page:
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
 </script>
-<script type="text/javascript" src="http://maxtaco.github.io/assets/js/bitcoin.js"> 
+<script type="text/javascript" src="/assets/js/bitcoin.js"> 
 </script>
-<script type="text/javascript" src="http://maxtaco.github.io/assets/js/ga.js"> 
+<script type="text/javascript" src="/assets/js/ga.js"> 
 </script>
 
-<style>
-div.goal {
-  border: 1px solid;
-  margin: 20px;
-  padding: 8px;
-  text-align: center;
-  background-color: #ff9;
-}
-</style>
-
+<link href="/assets/css/blog.css" rel="stylesheet" media="screen" />
 
 ### Abstract
 
