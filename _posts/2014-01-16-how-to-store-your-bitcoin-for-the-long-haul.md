@@ -88,7 +88,7 @@ brainwallets ought to employ the same security measures as pasword databases:
 ### A *Security-Enhanced* Brainwallet
 
 We built [WarpWallet](https://keybase.io/warp), a security-enhanced brainwallet
-implemented as a standalone Web page. WarpWallet is more secure that standard 
+implemented as a standalone Web page. WarpWallet is more secure than standard 
 brainwallets for two simple reasons: (1) it requests that each user picks a unique "salt"
 so that an adversary needs to crack each user's brainwallet individually; and (2),
 it hashes secret passphrases using [scrypt](http://www.tarsnap.com/scrypt.html)
