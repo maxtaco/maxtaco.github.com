@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "How to Store your Bitcoin for the Long Haul"
+title: "How Jason Bourne Stores His Bitcoin"
 description: "Keep your bitcoin safe from theft and loss; directions how"
 category: bitcoin
 tags: [bitcoin, warpwallet, security]
@@ -175,9 +175,9 @@ brute-force attack is necessary to derive keypairs from candidate passphrases.
 
 To quantify security against a brute-force attack, we make the following assumptions:
 
-1. scrypt is unbroken and must be brute-forced.
-1. PBKDF2 is free
-1. An adversary can use resources either to break a WarpWallet or to 
+1. scrypt is unbroken and must be brute-forced;
+1. PBKDF2 is free;
+1. And an adversary can use resources either to break a WarpWallet or to 
 mine [Litecoins](https://litecoin.org).  Therefore, the opportunity cost of breaking a WarpWallet
 is the Litecoins the advesary could have earned by mining. This assumption
 neatly considers hardware and energy costs, and allows the attacker
@@ -194,7 +194,7 @@ market conditions change:
    <td width="30">&nbsp;</td>
    <td>Price per Litecoin in USD</td>
    <td width="20">&nbsp;</td>
-   <td> <input style="width: 60px" id="usd_price" value="24.389"></input></td>
+   <td> <input style="width: 60px" id="usd_price" value="23.27"></input></td>
 </tr>
 <tr>
    <td width="30">&nbsp;</td>
@@ -206,7 +206,7 @@ market conditions change:
    <td width="30">&nbsp;</td>
    <td>Litecoin Difficulty</td>
    <td width="20">&nbsp;</td>
-   <td><input style="width: 60px" id="difficulty" value="3891"></input></td>
+   <td><input style="width: 60px" id="difficulty" value="3932"></input></td>
 </tr>
 <tr>
     <td width="30">&nbsp;</td>
