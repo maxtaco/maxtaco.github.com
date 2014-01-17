@@ -13,6 +13,8 @@ page:
 </script>
 <script type="text/javascript" src="http://maxtaco.github.io/assets/js/bitcoin.js"> 
 </script>
+<script type="text/javascript" src="http://maxtaco.github.io/assets/js/ga.js"> 
+</script>
 
 <style>
 div.goal {
