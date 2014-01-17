@@ -16,7 +16,7 @@ function usd_cost_per_warp_wallet_guess (params) {
 }
 
 function usd_cost_to_break_wallet (params) {
-	return Math.pow(2,params.entropy-1)*usd_cost_per_warp_wallet_guess(params);
+	return Math.pow(2,Math.min(params.entropy,256)-1)*usd_cost_per_warp_wallet_guess(params);
 }
 
 function usd_pp(n) {
