@@ -348,3 +348,8 @@ error-prone in practice.
 
 Use WarpWallet and follow our step-by-step directions above to store your
 coin for the long haul.
+
+## Credits
+
+Thanks to [Chris Coyne](https://twitter.com/malgorithms); he is
+co-author of WarpWallet and editted drafts of this post.
