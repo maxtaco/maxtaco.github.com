@@ -187,7 +187,7 @@ market conditions change:
    <td width="30">&nbsp;</td>
    <td>Price per Litecoin in USD</td>
    <td width="20">&nbsp;</td>
-   <td> <input style="width: 60px" id="usd_price" value="23.27"></input></td>
+   <td> <input style="width: 60px" id="usd_price" value="23.91"></input></td>
 </tr>
 <tr>
    <td width="30">&nbsp;</td>
@@ -199,7 +199,7 @@ market conditions change:
    <td width="30">&nbsp;</td>
    <td>Litecoin Difficulty</td>
    <td width="20">&nbsp;</td>
-   <td><input style="width: 60px" id="difficulty" value="3932"></input></td>
+   <td><input style="width: 60px" id="difficulty" value="3998"></input></td>
 </tr>
 <tr>
     <td width="30">&nbsp;</td>
