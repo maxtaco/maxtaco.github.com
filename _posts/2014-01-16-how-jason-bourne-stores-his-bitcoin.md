@@ -353,3 +353,7 @@ coin for the long haul.
 
 Thanks to [Chris Coyne](https://twitter.com/malgorithms); he is
 co-author of WarpWallet and editted drafts of this post.
+
+## Comments
+
+There's a [discussion](https://news.ycombinator.com/item?id=7083393) at HackerNews.
