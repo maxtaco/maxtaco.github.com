@@ -99,7 +99,7 @@ get2 = (cb) ->
   esc = make_esc cb # 'ESC' stands for Error Short Circuiter
   await request "https://x.io/", esc(defer(res, body))
   await request "https://x.io/?q=#{body.hash}", esc(defer(res, body))
-  cb null, res
+  cb null, body 
 {% endhighlight %}
 
 If the first call to `request` calls back with an error, then `cb` is called with the error, and the function is over.
