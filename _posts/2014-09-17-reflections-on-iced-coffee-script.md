@@ -11,16 +11,17 @@ page:
 
 <link href="/assets/css/blog.css" rel="stylesheet" media="screen" />
 
-I first wrote IcedCoffeeScript about 2 year ago, and have been developing with
-it almost exclusively since.  Our current project, Keybase.io, uses ICS 
-in three distinct places: on the Web front-end, in our node command-line client,
+I first wrote [IcedCoffeeScript](https://github.com/maxtaco/coffee-script) about 2 year ago, 
+and have been developing with it almost exclusively since.  Our current project, 
+[Keybase.io](https://keybase.io), uses ICS
+in three distinct places: on the Web front-end, in our [node command-line client](https://github.com/keybase/node-client),
 and on the server back-end.  As client code becomes more complex, we find the
 features of ICS more crucial to getting our job done.  I thought I'd summarize
 what makes it a nice system for those who haven't checked it out.
 
 ## Background
 
-IcedCoffeeScript is a fork of CoffeeScript that introduced two new keywords
+IcedCoffeeScript is a fork of [CoffeeScript](https://github.com/jashkenas/coffee-script) that introduced two new keywords
 ---- `await` and `defer`.  Internally, it augments the CoffeeScript compiler
 with a full continutation-passing style code rewriter.  So the compiler
 outputs "pyramid-of-death" style spaghetti JavaScript code, while the
@@ -47,7 +48,7 @@ I hate this code for several reasons; it's hard to read; it's hard refactor; the
 repeated calls to `cb`, any one of which might be forgotten and can break the program;
 it's brittle and won't compose well with standard language features, like `if` and `for`.
 
-## The First Step to a Solution
+## Cool that Coffee Down
 
 The first part of the solution came intentionally with IcedCoffeeScript; use
 continuation-passing-style conversion to achieve the illusion of threads:
@@ -65,7 +66,7 @@ get2: (cb) ->
 It's not crucial to understand the finer points of `await` and `defer` here, but the
 salient aspects are that the function `get2` will block until `request` returns,
 at which point `err, res, body` will get the three values that `request` called back with.
-Then, control continues as `unless err?`.
+Then, control continues at `unless err?`.
 
 Already, this code is much cleaner.  There's only one call to `cb`; the code doesn't
 veer off the page the right; adding conditionals and iteration would be straightforward.
@@ -85,9 +86,11 @@ get2: (cb) ->
   cb null, res
 {% endhighlight %}
 
+
+
 ## An Elegant Solution that Exploits The CPS-conversion
 
-The elegant solution only came to us a year into writing code with IcedCoffeeScript.
+The elegant solution only [came to us](https://github.com/maxtaco/coffee-script/issues/35) a year into writing code with IcedCoffeeScript.
 In the above example, the language feature `defer(err, res, body)` creates a callback that
 `request` calls when it's done.  That callback represents *the rest of the `get2` function*!
 Meaning, if there's an error, it can be thrown away, since the rest of the function should
