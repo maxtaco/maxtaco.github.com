@@ -120,7 +120,7 @@ with the error, throwing away `cb2`, which represents the rest of the function. 
 is not an error, then forge ahead.  Call `cb2` which executes the rest of the function.
 
 This `make_esc` function is extremely useful and I use it in almost *every function that I write*.
-But because it's a library function, you can write your own to work around the weird error
+But because it's a library function, you can write your own to work around the error
 semantics of your particular library, without having to fiddle with the IcedCoffeeScript
 compiler. Or, you can write an `make_esc` that first releases a lock, and then calls `cb`
 (also quite useful).  Whatever ought to happen on error but before the function scope
