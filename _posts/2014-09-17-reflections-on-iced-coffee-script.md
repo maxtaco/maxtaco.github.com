@@ -12,7 +12,7 @@ page:
 <link href="/assets/css/blog.css" rel="stylesheet" media="screen" />
 
 [Chris Coyne](https://keybase.io/chris) and [I](https://keybase.io/max) 
-wrote [IcedCoffeeScript](https://github.com/maxtaco/coffee-script) about 2 year ago, 
+wrote [IcedCoffeeScript (ICS)](https://github.com/maxtaco/coffee-script) about 2 year ago, 
 and have been developing with it almost exclusively since.  Our current project, 
 [Keybase.io](https://keybase.io), uses ICS
 everywhere: on the Web front-end, in our [node command-line client](https://github.com/keybase/node-client),
