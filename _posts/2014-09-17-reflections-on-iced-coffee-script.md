@@ -3,7 +3,7 @@ layout: post
 title: "Handling Errors in IcedCoffeeScript"
 description: ""
 category: programming
-tags: [CoffeeSript, JavaScript, IcedCoffeeScript]
+tags: [CoffeeScript, JavaScript, IcedCoffeeScript]
 page:
   comments : false
 ---
@@ -24,7 +24,7 @@ what makes it a nice system for those who haven't checked it out.
 
 IcedCoffeeScript is a fork of [CoffeeScript](https://github.com/jashkenas/coffee-script) that introduced two new keywords
 --- `await` and `defer`.  Internally, it augments the CoffeeScript compiler
-with a [Continutation-Passing Style (CPS)](http://en.wikipedia.org/wiki/Continuation-passing_style) code rewriter.
+with a [Continuation-Passing Style (CPS)](http://en.wikipedia.org/wiki/Continuation-passing_style) code rewriter.
 So the compiler outputs "pyramid-of-death" style spaghetti JavaScript code, while the
 programmer sees clean straightline CoffeeScript-like code.
 
@@ -124,11 +124,11 @@ But because it's a library function, you can write your own to work around the w
 semantics of your particular library, without having to fiddle with the IcedCoffeeScript
 compiler. Or, you can write an `make_esc` that first releases a lock, and then calls `cb`
 (also quite useful).  Whatever ought to happen on error but before the function scope
-disappears, a short-circuter can handle it cleanly.
+disappears, a short-circuiter can handle it cleanly.
 
 ## In Sum...
 
-IcedCoffeeScript plus the "Error Short-Circuiter" library is powerful and succint
+IcedCoffeeScript plus the "Error Short-Circuiter" library is powerful and succinct
 way to clean up your JavaScript-based applications.  We've been writing code this
 way for over a year now and can't imagine going back to the old toolset.
 
