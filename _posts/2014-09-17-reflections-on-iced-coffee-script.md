@@ -32,9 +32,7 @@ HTTP requests, and the first depends on the second.  When it's all done, I want
 a callback to fire with the results, or to describe that an error happened:
 
 {% highlight coffeescript %}
-request = require 'request'
-
-get2 : (cb) ->
+get2 = (cb) ->
   request { uri : "https://x.io/", json : true }, (err, res, body) ->
     if err? then cb err
     else 
@@ -54,9 +52,7 @@ The first part of the solution came intentionally with IcedCoffeeScript; use
 continuation-passing-style conversion to achieve the illusion of threads:
 
 {% highlight coffeescript %}
-request = require 'request'
-
-get2: (cb) ->
+get2 = (cb) ->
   await request { uri : "https://x.io/", json : true }, defer(err, res, body)
   unless err?
     await request { uri : "https://x.io/?q=#{body.hash}", json : true }, defer(err, res, body)
@@ -75,9 +71,7 @@ request pipeline, we'd need three checks of `err?` to make sure there wasn't an 
 Or something equally gross:
 
 {% highlight coffeescript %}
-request = require 'request'
-
-get2: (cb) ->
+get2 = (cb) ->
   await request { uri : "https://x.io/", json : true }, defer(err, res, body)
   return cb err if err?
   await request { uri : "https://x.io/?q=#{body.hash}", json : true }, defer(err, res, body)
@@ -86,7 +80,7 @@ get2: (cb) ->
   cb null, res
 {% endhighlight %}
 
-
+<br/>
 
 ## An Elegant Solution that Exploits The CPS-conversion
 
@@ -99,10 +93,8 @@ not be executed.  Instead, the outer callback, `cb`, should be called with an er
 We can accomplish this pattern without any additions to the language, just with library help:
 
 {% highlight coffeescript %}
-request = require 'request'
 {make_esc} = require 'iced-error'
-
-get2 : (cb) ->
+get2 = (cb) ->
   esc = make_esc cb # 'ESC' stands for Error Short Circuiter
   await request { uri : "https://x.io/", json : true }, esc(defer(res, body))
   await request { uri : "https://x.io/?q=#{body.hash}", json : true }, esc(defer(res, body))
