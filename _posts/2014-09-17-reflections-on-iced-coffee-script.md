@@ -67,7 +67,7 @@ at which point `err, res, body` will get the three values that `request` called 
 Then, control continues at `unless err?`.
 
 Already, this code is much cleaner.  There's only one call to `cb`; the code doesn't
-veer off the page the right; adding conditionals and iteration would be straightforward.
+veer off the page to the right; adding conditionals and iteration would be straightforward.
 But there's still an issue: errors are ugly to handle.  If we had 4 steps in this
 request pipeline, we'd need three checks of `err?` to make sure there wasn't an error.
 Or something equally gross:
