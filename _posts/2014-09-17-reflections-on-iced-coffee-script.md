@@ -33,11 +33,11 @@ a callback to fire with the results, or to describe that an error happened:
 {% highlight coffeescript %}
 request = require 'request'
 
-get_root : (cb) ->
-  request { uri : "https://keybase.io/_/api/1.0/merkle/root.json", json : true }, (err, res, body) ->
+get2 : (cb) ->
+  request { uri : "https://x.io/", json : true }, (err, res, body) ->
     if err? then cb err
     else 
-      request { uri : "https://keybase.io/_/api/1.0/merkle/block.json?hash=#{body.hash}", json : true }, (err, res, body) ->
+      request { uri : "https://x.io/?q=#{body.hash}", json : true }, (err, res, body) ->
         if err? then cb err
         else cb null, body
 {% endhighlight %}
@@ -55,15 +55,15 @@ continuation-passing-style conversion to achieve the illusion of threads:
 {% highlight coffeescript %}
 request = require 'request'
 
-get_root : (cb) ->
-  await request { uri : "https://keybase.io/_/api/1.0/merkle/root.json", json : true }, defer(err, res, body)
+get2: (cb) ->
+  await request { uri : "https://x.io/", json : true }, defer(err, res, body)
   unless err?
-    await request { uri : "https://keybase.io/_/api/1.0/merkle/block.json?hash=#{body.hash}", json : true }, defer(err, res, body)
+    await request { uri : "https://x.io/?q=#{body.hash}", json : true }, defer(err, res, body)
   cb err, body
 {% endhighlight %}
 
 It's not crucial to understand the finer points of `await` and `defer` here, but the
-salient aspects are that the function `get_root` will block until `request` returns,
+salient aspects are that the function `get2` will block until `request` returns,
 at which point `err, res, body` will get the three values that `request` called back with.
 Then, control continues as `unless err?`.
 
@@ -76,10 +76,10 @@ Or something equally gross:
 {% highlight coffeescript %}
 request = require 'request'
 
-get_root : (cb) ->
-  await request { uri : "https://keybase.io/_/api/1.0/merkle/root.json", json : true }, defer(err, res, body)
+get2: (cb) ->
+  await request { uri : "https://x.io/", json : true }, defer(err, res, body)
   return cb err if err?
-  await request { uri : "https://keybase.io/_/api/1.0/merkle/block.json?hash=#{body.hash}", json : true }, defer(err, res, body)
+  await request { uri : "https://x.io/?q=#{body.hash}", json : true }, defer(err, res, body)
   return cb err if err?
   # etc...
   cb null, res
@@ -89,7 +89,7 @@ get_root : (cb) ->
 
 The elegant solution only came to us a year into writing code with IcedCoffeeScript.
 In the above example, the language feature `defer(err, res, body)` creates a callback that
-`request` calls when it's done.  That callback represents *the rest of the `get_root` function*!
+`request` calls when it's done.  That callback represents *the rest of the `get2` function*!
 Meaning, if there's an error, it can be thrown away, since the rest of the function should
 not be executed.  Instead, the outer callback, `cb`, should be called with an error.
 
@@ -99,10 +99,10 @@ We can accomplish this pattern without any additions to the language, just with 
 request = require 'request'
 {make_esc} = require 'iced-error'
 
-get_root : (cb) ->
+get2 : (cb) ->
   esc = make_esc cb # 'ESC' stands for Error Short Circuiter
-  await request { uri : "https://keybase.io/_/api/1.0/merkle/root.json", json : true }, esc(defer(res, body))
-  await request { uri : "https://keybase.io/_/api/1.0/merkle/block.json?hash=#{body.hash}", json : true }, esc(defer(res, body))
+  await request { uri : "https://x.io/", json : true }, esc(defer(res, body))
+  await request { uri : "https://x.io/?q=#{body.hash}", json : true }, esc(defer(res, body))
   cb null, res
 {% endhighlight %}
 
