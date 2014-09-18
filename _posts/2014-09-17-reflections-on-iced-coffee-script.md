@@ -30,7 +30,8 @@ programmer sees clean straightline CoffeeScript-like code.
 
 For instance, consider this common pattern in node.js.  I want to make two serial
 HTTP requests, and the first depends on the second.  When it's all done, I want
-a callback to fire with the results, or to describe that an error happened:
+a callback to fire with the results, or to describe that an error happened.
+Here's the standard CoffeeScript way:
 
 {% highlight coffeescript %}
 get2 = (cb) ->
