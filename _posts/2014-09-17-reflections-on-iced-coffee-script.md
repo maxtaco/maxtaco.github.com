@@ -86,7 +86,8 @@ get2 = (cb) ->
 
 ## An Elegant Solution that Exploits the CPS-conversion
 
-The elegant solution [was suggested to us](https://github.com/maxtaco/coffee-script/issues/35) a year into writing code with IcedCoffeeScript.
+An elegant solution [was discovered](https://github.com/maxtaco/coffee-script/issues/35) 
+a year into writing code with IcedCoffeeScript.
 In the above example, the language feature `defer(err, res, body)` creates a callback that
 `request` calls when it's done.  That callback represents *the rest of the `get2` function*!
 Meaning, if there's an error, it can be thrown away, since the rest of the function should
