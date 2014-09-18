@@ -60,8 +60,8 @@ get2 = (cb) ->
   cb err, body
 {% endhighlight %}
 
-It's not crucial to understand the finer points of `await` and `defer` here, but the
-salient aspects are that the function `get2` will block until `request` completes,
+It's not crucial here to understand the finer points of `await` and `defer`, but the
+salient aspects are that the function `get2` blocks until `request` completes,
 at which point `err, res, body` will get the three values that `request` called back with.
 Then, control continues at `unless err?`.
 
@@ -91,7 +91,7 @@ In the above example, the language feature `defer(err, res, body)` creates a cal
 Meaning, if there's an error, it can be thrown away, since the rest of the function should
 not be executed.  Instead, the outer callback, `cb`, should be called with an error.
 
-We can accomplish this pattern without any additions to the language, just with library help:
+We can accomplish this pattern without language additions, just with library help:
 
 {% highlight coffeescript %}
 {make_esc} = require 'iced-error'
