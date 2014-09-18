@@ -105,7 +105,8 @@ get2 = (cb) ->
 {% endhighlight %}
 
 If the first call to `request` calls back with an error, then `cb` is called with the error, and the function is over.
-The function `make_esc` seems like magic, but it's not, it's doing something quite simple:
+Otherwise, onto the second request (and the rest of `get2`).
+The function `make_esc` might seem magical, but it's not, it's doing something quite simple:
 
 {% highlight coffeescript %}
 make_esc = (cb1) -> (cb2) -> (err, args...) ->
