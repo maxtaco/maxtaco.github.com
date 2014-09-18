@@ -23,7 +23,7 @@ what makes it a nice system for those who haven't checked it out.
 ## Background
 
 IcedCoffeeScript is a fork of [CoffeeScript](https://github.com/jashkenas/coffee-script) that introduced two new keywords
----- `await` and `defer`.  Internally, it augments the CoffeeScript compiler
+--- `await` and `defer`.  Internally, it augments the CoffeeScript compiler
 with a [Continutation-Passing Style (CPS)](http://en.wikipedia.org/wiki/Continuation-passing_style) code rewriter.
 So the compiler outputs "pyramid-of-death" style spaghetti JavaScript code, while the
 programmer sees clean straightline CoffeeScript-like code.
@@ -34,10 +34,10 @@ a callback to fire with the results, or to describe that an error happened:
 
 {% highlight coffeescript %}
 get2 = (cb) ->
-  request { uri : "https://x.io/", json : true }, (err, res, body) ->
+  request "https://x.io/", (err, res, body) ->
     if err? then cb err
     else 
-      request { uri : "https://x.io/?q=#{body.hash}", json : true }, (err, res, body) ->
+      request "https://x.io/?q=#{body.hash}", (err, res, body) ->
         if err? then cb err
         else cb null, body
 {% endhighlight %}
@@ -54,9 +54,9 @@ CPS conversion to achieve the illusion of threads:
 
 {% highlight coffeescript %}
 get2 = (cb) ->
-  await request { uri : "https://x.io/", json : true }, defer(err, res, body)
+  await request "https://x.io/", defer(err, res, body)
   unless err?
-    await request { uri : "https://x.io/?q=#{body.hash}", json : true }, defer(err, res, body)
+    await request "https://x.io/?q=#{body.hash}", defer(err, res, body)
   cb err, body
 {% endhighlight %}
 
@@ -73,9 +73,9 @@ Or something equally gross:
 
 {% highlight coffeescript %}
 get2 = (cb) ->
-  await request { uri : "https://x.io/", json : true }, defer(err, res, body)
+  await request "https://x.io/", defer(err, res, body)
   return cb err if err?
-  await request { uri : "https://x.io/?q=#{body.hash}", json : true }, defer(err, res, body)
+  await request "https://x.io/?q=#{body.hash}", defer(err, res, body)
   return cb err if err?
   # etc...
   cb null, res
@@ -97,8 +97,8 @@ We can accomplish this pattern without any additions to the language, just with 
 {make_esc} = require 'iced-error'
 get2 = (cb) ->
   esc = make_esc cb # 'ESC' stands for Error Short Circuiter
-  await request { uri : "https://x.io/", json : true }, esc(defer(res, body))
-  await request { uri : "https://x.io/?q=#{body.hash}", json : true }, esc(defer(res, body))
+  await request "https://x.io/", esc(defer(res, body))
+  await request "https://x.io/?q=#{body.hash}", esc(defer(res, body))
   cb null, res
 {% endhighlight %}
 
