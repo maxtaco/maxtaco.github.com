@@ -123,11 +123,12 @@ This `make_esc` function is extremely useful and I use it in almost *every funct
 But because it's a library function, you can write your own to work around the weird error
 semantics of your particular library, without having to fiddle with the IcedCoffeeScript
 compiler. Or, you can write an `make_esc` that first releases a lock, and then calls `cb`
-(also quite useful).
+(also quite useful).  Whatever ought to happen on error but before the function scope
+disappears, a short-circuter can handle it cleanly.
 
 ## In Sum...
 
 IcedCoffeeScript plus the "Error Short-Circuiter" library is powerful and succint
-way to clean up your JavaScript-based applications.  We're been writing code this
-way for a year now, and can't imagine going back to the old toolset.
+way to clean up your JavaScript-based applications.  We've been writing code this
+way for over a year now and can't imagine going back to the old toolset.
 
