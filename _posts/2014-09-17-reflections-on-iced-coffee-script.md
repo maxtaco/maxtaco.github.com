@@ -44,7 +44,7 @@ get2 = (cb) ->
 {% endhighlight %}
 
 This is not a contrived example, it was literally the first one I thought of.
-I hate this code for several reasons; it's hard to read; it's hard refactor; there are
+I hate this code for several reasons: it's hard to read; it's hard refactor; there are
 repeated calls to `cb`, any one of which might be forgotten and can break the program;
 it's brittle and won't compose well with standard language features, like `if` and `for`.
 
@@ -128,7 +128,7 @@ disappears, a short-circuiter can handle it cleanly.
 
 ## In Sum...
 
-IcedCoffeeScript plus the "Error Short-Circuiter" library is powerful and succinct
+IcedCoffeeScript plus the "Error Short-Circuiter" pattern is a powerful and succinct
 way to clean up your JavaScript-based applications.  We've been writing code this
 way for over a year now and can't imagine going back to the old toolset.
 
