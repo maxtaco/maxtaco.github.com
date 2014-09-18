@@ -60,7 +60,7 @@ get2 = (cb) ->
 {% endhighlight %}
 
 It's not crucial to understand the finer points of `await` and `defer` here, but the
-salient aspects are that the function `get2` will block until `request` returns,
+salient aspects are that the function `get2` will block until `request` completes,
 at which point `err, res, body` will get the three values that `request` called back with.
 Then, control continues at `unless err?`.
 
