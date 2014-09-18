@@ -11,10 +11,11 @@ for OkCupid while pursing a [PhD](http://pdos.csail.mit.edu/~max/docs/krohn-thes
 at [MIT advised by Frank Kaashoek](http://pdos.csail.mit.edu). Since leaving MIT
 and OkCupid, I've been working on the [IcedCoffeeScript](https://maxtaco.github.com/coffee-script)
 extention to CoffeeScript, the [OneShallPass](https://oneshallpass.com) password
-management system, and a new project with [Chris Coyne](http://malgorithms.com).
+management system, and [Keybase.io](https://keybase.io) with [Chris Coyne](http://malgorithms.com).
 
 ## Follow Me
 
+* [max](https://keybase.io/max) on Keybase
 * [@maxtaco](https://twitter.com/maxtaco) on Twutter
 * [maxtaco](https://github.com/maxtaco) on GitHub
 
