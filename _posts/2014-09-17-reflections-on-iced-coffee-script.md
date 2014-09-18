@@ -23,8 +23,8 @@ what makes it a nice system for those who haven't checked it out.
 
 IcedCoffeeScript is a fork of [CoffeeScript](https://github.com/jashkenas/coffee-script) that introduced two new keywords
 ---- `await` and `defer`.  Internally, it augments the CoffeeScript compiler
-with a full continutation-passing style code rewriter.  So the compiler
-outputs "pyramid-of-death" style spaghetti JavaScript code, while the
+with a [Continutation-Passing Style (CPS)](http://en.wikipedia.org/wiki/Continuation-passing_style) code rewriter.
+So the compiler outputs "pyramid-of-death" style spaghetti JavaScript code, while the
 programmer sees clean straightline CoffeeScript-like code.
 
 For instance, consider this common pattern in Node.JS.  I want to make two serial
@@ -49,7 +49,7 @@ it's brittle and won't compose well with standard language features, like `if` a
 ## Cool that Coffee Down
 
 The first part of the solution came intentionally with IcedCoffeeScript; use
-continuation-passing-style conversion to achieve the illusion of threads:
+CPS conversion to achieve the illusion of threads:
 
 {% highlight coffeescript %}
 get2 = (cb) ->
@@ -82,7 +82,7 @@ get2 = (cb) ->
 
 <br/>
 
-## An Elegant Solution that Exploits The CPS-conversion
+## An Elegant Solution that Exploits the CPS-conversion
 
 The elegant solution only [came to us](https://github.com/maxtaco/coffee-script/issues/35) a year into writing code with IcedCoffeeScript.
 In the above example, the language feature `defer(err, res, body)` creates a callback that
