@@ -15,7 +15,7 @@ page:
 wrote [IcedCoffeeScript](https://github.com/maxtaco/coffee-script) about 2 year ago, 
 and have been developing with it almost exclusively since.  Our current project, 
 [Keybase.io](https://keybase.io), uses ICS
-in three distinct places: on the Web front-end, in our [node command-line client](https://github.com/keybase/node-client),
+everywhere: on the Web front-end, in our [node command-line client](https://github.com/keybase/node-client),
 and on the server back-end.  As client code becomes more complex, we find the
 features of ICS more crucial to getting our job done.  I thought I'd summarize
 what makes it a nice system for those who haven't checked it out.
