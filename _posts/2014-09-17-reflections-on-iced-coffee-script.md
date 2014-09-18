@@ -43,7 +43,7 @@ get2 = (cb) ->
         else cb null, body
 {% endhighlight %}
 
-This is not a contrived example, it was literally the first example that I thought of.
+This is not a contrived example, it was literally the first one I thought of.
 I hate this code for several reasons; it's hard to read; it's hard refactor; there are
 repeated calls to `cb`, any one of which might be forgotten and can break the program;
 it's brittle and won't compose well with standard language features, like `if` and `for`.
